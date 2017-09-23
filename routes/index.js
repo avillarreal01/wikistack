@@ -9,16 +9,16 @@ var urlencodedParser = bodyParser.urlencoded({extended: false});
 
 router.get('/', (req, res) => {
 
-  res.render('index'));
-}
+  res.render('index');
+});
 
 router.get('/wiki/', (req,res) => {
 
-})
+});
 
 router.post('/wiki/', (req,res) => {
 
-})
+});
 
 
 
