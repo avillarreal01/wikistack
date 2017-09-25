@@ -4,10 +4,8 @@ const models = require('../models');
 var Page = models.Page;
 var User = models.User;
 
-router.get ('/', (req, res, next) => {
-  User.findAll({}).then(function(users){
-    users = users.map(user => user.dataValues);
-    console.log(users);
+router.get('/', (req, res, next) => {
+  User.findAll({}).then( users => {
     res.render('users', {users});
   }).catch(next);
 });
@@ -24,7 +22,7 @@ router.get('/:userId', (req, res, next) => {
     userPromise,
     pagesPromise
   ])
-  .then( values=> {
+  .then( values => {
     let user = values[0];
     let pages = values[1];
     res.render('user', {user: user, pages: pages});
@@ -33,15 +31,15 @@ router.get('/:userId', (req, res, next) => {
 
 });
 
-router.post ('/', (req, res) => {
+router.post('/', (req, res) => {
   res.send('create user');
 });
 
-router.put('/:user', (req,res) => {
+router.put('/:user', (req, res) => {
   res.send('update user');
 });
 
-router.delete('/:user', (req,res) => {
+router.delete('/:user', (req, res) => {
   res.send('delete user');
 });
 module.exports = router;

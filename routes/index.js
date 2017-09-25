@@ -14,14 +14,12 @@ let User = models.User;
 router.use('/wiki', wikiRouter);
 router.use('/users', userRouter);
 
-router.get('/', (req, res) => {
-  let pages; //undefined
+router.get('/', (req, res, next) => {
   Page.findAll()
   .then((pages) => {
-    let dataPages = pages.map((page) => page.dataValues);
-    res.render('index', {pages: dataPages});
+    res.render('index', {pages});
   })
-  .catch(console.err);
+  .catch(next);
 });
 
 module.exports = router;

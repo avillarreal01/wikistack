@@ -2,7 +2,7 @@
 
 {% block content %}
 <div><br></div><div><br></div><div><br></div><div><br></div>
-<ul>
+<ul class="list-unstyled">
   {% for user in users %}
     <li><a href="/users/{{ user.id }}">{{ user.name }}</a></li>
   {% endfor %}

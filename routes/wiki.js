@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const models = require('../models');
 
-var Page = models.Page;
-var User = models.User;
+let Page = models.Page;
+let User = models.User;
 
 router.get('/', (req, res) => {
   res.redirect('/');
@@ -29,7 +29,7 @@ router.post('/', (req, res, next) => {
   .then(page => {
     res.redirect(page.route);
   })
-  .catch(console.error);
+  .catch(next);
 });
 
 router.get('/add', (req, res) => {
@@ -42,8 +42,8 @@ router.get('/:urlTitle', (req, res, next) => {
       urlTitle: req.params.urlTitle
     }
   })
-  .then(function(foundPage){
-    res.render('wikipage', foundPage.dataValues);
+  .then( page => {
+    res.render('wikipage', {page});
   })
   .catch(next);
 });

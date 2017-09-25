@@ -7,21 +7,19 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-//Setup nunjucks
 var env = nunjucks.configure('views', {noCache: true});
 app.set('view engine', 'html');
 app.engine('html', nunjucks.render);
 
-//models.db.sync({force: true});
-//{force: true}
+//{force: true} to update table schemas
 models.User.sync()
 .then(function () {
-    return models.Page.sync();
+  return models.Page.sync();
 })
 .then(function () {
-    app.listen(4000, function () {
-        console.log('Server is listening on port 4000!');
-    });
+  app.listen(4000, function () {
+    console.log('Server is listening on port 4000!');
+  });
 })
 .catch(console.error);
 
@@ -32,3 +30,8 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(__dirname + '/public'));
 
 app.use('/', routes);
+
+app.use(function (err, res, req, next) {
+  console.error(err);
+  res.status(500).send(err.message);
+});
