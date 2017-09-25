@@ -18,7 +18,9 @@ router.get('/', (req, res) => {
   let pages; //undefined
   Page.findAll()
   .then((pages) => {
-    res.render('index', pages);
+    pages = pages.map((page) => page.dataValues)
+    console.log(pages)
+    res.render('index', {pages});
   })
   .catch(console.err);
 });
