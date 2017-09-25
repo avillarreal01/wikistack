@@ -15,6 +15,7 @@ router.use('/wiki', wikiRouter);
 router.use('/users', userRouter);
 
 router.get('/', (req, res) => {
+  let pages; //undefined
   Page.findAll()
   .then((pages) => {
     res.render('index', pages);
