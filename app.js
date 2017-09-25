@@ -13,6 +13,7 @@ app.set('view engine', 'html');
 app.engine('html', nunjucks.render);
 
 //models.db.sync({force: true});
+//{force: true}
 models.User.sync()
 .then(function () {
     return models.Page.sync();

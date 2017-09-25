@@ -4,13 +4,8 @@
   <h3>Pages</h3>
   <hr>
   <ul class="list-unstyled">
-    <!-- PLACEHOLDER LIST OF PAGES -->
-    <li><br></br></li>
-
-
-
-    {% for page in pages%}
-      <li><a href={{page.title}}>{{page.title}}</a></li>
+    {% for page in pages %}
+      <li><a href={{'/wiki/' + page.urlTitle}}>{{page.title}}</a></li>
     {% endfor %}
   </ul>
 {% endblock %}

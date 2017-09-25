@@ -10,17 +10,26 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res, next) => {
-  var page = Page.build({
-    title: req.body.title,
-    content: req.body.content,
-    //status: req.body.status,
-  });
-
-  page.save()
-  .then((savedPage) => {
-    res.redirect(savedPage.route);
+  User.findOrCreate({
+    where: {
+      name: req.body.name,
+      email: req.body.email
+    }
   })
-  .catch(next);
+  .then((resolve) => {
+    var user = resolve[0];
+    var page = Page.build({
+      title: req.body.title,
+      content: req.body.content,
+    });
+    return page.save().then( page => {
+      return page.setAuthor(user);
+    });
+  })
+  .then(page => {
+    res.redirect(page.route);
+  })
+  .catch(console.error);
 });
 
 router.get('/add', (req, res) => {
