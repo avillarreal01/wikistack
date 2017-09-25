@@ -8,7 +8,7 @@ const router = express.Router();
 var urlencodedParser = bodyParser.urlencoded({extended: false});
 
 router.use('/wiki', wikiRouter);
-router.use('/user', userRouter);
+router.use('/users', userRouter);
 
 router.get('/', (req, res) => {
 
