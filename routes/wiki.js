@@ -5,25 +5,38 @@ const models = require('../models');
 var Page = models.Page;
 var User = models.User;
 
-router.get('/', (req,res) => {
+router.get('/', (req, res) => {
   res.redirect('/');
 });
 
-router.post('/', (req,res) => {
+router.post('/', (req, res, next) => {
   var page = Page.build({
     title: req.body.title,
     content: req.body.content,
-    urlTitle: '/wiki/' + req.body.title,
-    status: req.body.status
+    //status: req.body.status,
   });
 
   page.save()
-  .then(() => res.redirect('/'));
-
+  .then((savedPage) => {
+    res.redirect(savedPage.route);
+  })
+  .catch(next);
 });
 
-router.get('/add', (req,res) => {
+router.get('/add', (req, res) => {
   res.render('addpage');
+});
+
+router.get('/:urlTitle', (req, res, next) => {
+  Page.findOne({
+    where: {
+      urlTitle: req.params.urlTitle
+    }
+  })
+  .then(function(foundPage){
+    res.render('wikipage', foundPage.dataValues);
+  })
+  .catch(next);
 });
 
 module.exports = router;
