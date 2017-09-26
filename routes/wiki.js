@@ -1,12 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const models = require('../models');
-
 let Page = models.Page;
 let User = models.User;
 
-router.get('/', (req, res) => {
-  res.redirect('/');
+router.get('/', (req, res, next) => {
+  Page.findAll()
+  .then((pages) => {
+    res.render('index', {pages});
+  })
+  .catch(next);
 });
 
 router.post('/', (req, res, next) => {

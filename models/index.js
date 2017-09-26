@@ -1,4 +1,6 @@
 var Sequelize = require('sequelize');
+var marked = require('marked');
+
 var db = new Sequelize('postgres://localhost:5432/wikistack', {
   logging: false
 });
@@ -11,6 +13,7 @@ var Page = db.define('page', {
   urlTitle: {
     type: Sequelize.STRING,
     allowNull: false,
+    unique: true
   },
   content: {
     type: Sequelize.TEXT,
@@ -26,36 +29,40 @@ var Page = db.define('page', {
 }, {
   hooks: {
     beforeValidate: (page, options) => {
-        if (page.title) {
-          page.urlTitle = page.title.replace(/ /g, '_').replace(/\W/g, '');
-        }
-        else {
-          page.urlTitle = Math.random().toString(36).substring(2, 7);
-        }
+      if (page.title) {
+        page.urlTitle = page.title.replace(/ /g, '_').replace(/\W/g, '');
+      } else {
+        page.urlTitle = Math.random().toString(36).substring(2, 7);
       }
-    },
+    }
+  },
   getterMethods: {
     route: function () {
       return '/wiki/' + this.urlTitle;
+    },
+    renderedContent: function () {
+      return marked(this.content);
     }
   }
 });
 
 var User = db.define('user', {
   name: {
-      type: Sequelize.STRING,
-      allowNull: false
+    type: Sequelize.STRING,
+    allowNull: false
   },
   email: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      validate: {
-        isEmail: true
-      }
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      isEmail: true
+    }
   }
 });
 
-Page.belongsTo(User, { as: 'author'});
+Page.belongsTo(User, {
+  as: 'author'
+});
 
 module.exports = {
   db: db,

@@ -20,9 +20,11 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.15.4",
+    "marked": "^0.3.6",
     "morgan": "^1.8.2",
     "nodemon": "^1.12.1",
     "nunjucks": "^3.0.1",
+    "path": "^0.12.7",
     "pg": "^6.4.1",
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.10.0"

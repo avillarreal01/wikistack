@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const models = require('../models');
-var Page = models.Page;
-var User = models.User;
+const Promise = require('bluebird');
+let Page = models.Page;
+let User = models.User;
 
 router.get('/', (req, res, next) => {
   User.findAll({}).then( users => {
@@ -18,16 +19,11 @@ router.get('/:userId', (req, res, next) => {
     }
   });
 
-  Promise.all([
-    userPromise,
-    pagesPromise
-  ])
-  .then( values => {
-    let user = values[0];
-    let pages = values[1];
-    res.render('user', {user: user, pages: pages});
-  })
-  .catch(next);
+  Promise.all([userPromise, pagesPromise])
+    .spread( (user, userPages) => {
+      res.render('user', {user: user, pages: userPages});
+    })
+    .catch(next);
 
 });
 

@@ -1,15 +1,19 @@
 const express = require('express');
 const morgan = require('morgan');
-const routes = require('./routes');
 const models = require('./models');
 const nunjucks = require('nunjucks');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const app = express();
 
-var env = nunjucks.configure('views', {noCache: true});
 app.set('view engine', 'html');
 app.engine('html', nunjucks.render);
+var env = nunjucks.configure('views', {noCache: true});
+
+// require('./filters')(env);
+// var AutoEscapeExtension = require('nunjucks-autoescape')(nunjucks);
+// env.addExtension('AutoEscapeExtension', new AutoEscapeExtension(env));
 
 //{force: true} to update table schemas
 models.User.sync()
@@ -29,9 +33,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(__dirname + '/public'));
 
-app.use('/', routes);
+app.use('/wiki', require('./routes/wiki'));
+app.use('/users', require('./routes/user'));
+
+app.get('/', function (req, res) {
+   res.render('index');
+});
 
 app.use(function (err, res, req, next) {
-  console.error(err);
-  res.status(500).send(err.message);
+  console.error(err.stack);
+  res.status(err.status || 500).send(err.message || 'Internal Error');
 });
+
+module.exports = app;
