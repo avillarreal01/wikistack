@@ -11,9 +11,9 @@ app.set('view engine', 'html');
 app.engine('html', nunjucks.render);
 var env = nunjucks.configure('views', {noCache: true});
 
-// require('./filters')(env);
-// var AutoEscapeExtension = require('nunjucks-autoescape')(nunjucks);
-// env.addExtension('AutoEscapeExtension', new AutoEscapeExtension(env));
+require('./filters')(env);
+var AutoEscapeExtension = require('nunjucks-autoescape')(nunjucks);
+env.addExtension('AutoEscapeExtension', new AutoEscapeExtension(env));
 
 //{force: true} to update table schemas
 models.User.sync()
@@ -37,10 +37,10 @@ app.use('/wiki', require('./routes/wiki'));
 app.use('/users', require('./routes/user'));
 
 app.get('/', function (req, res) {
-   res.render('index');
+   res.render('home');
 });
 
-app.use(function (err, res, req, next) {
+app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(err.status || 500).send(err.message || 'Internal Error');
 });

@@ -6,7 +6,7 @@ let Page = models.Page;
 let User = models.User;
 
 router.get('/', (req, res, next) => {
-  User.findAll({}).then( users => {
+  User.findAll().then( users => {
     res.render('users', {users});
   }).catch(next);
 });

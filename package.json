@@ -28,5 +28,8 @@
     "pg": "^6.4.1",
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.10.0"
+  },
+  "devDependencies": {
+    "nunjucks-autoescape": "^1.0.1"
   }
 }

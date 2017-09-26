@@ -6,10 +6,10 @@ let User = models.User;
 
 router.get('/', (req, res, next) => {
   Page.findAll()
-  .then((pages) => {
-    res.render('index', {pages});
-  })
-  .catch(next);
+    .then((pages) => {
+      res.render('index', { pages });
+    })
+    .catch(next);
 });
 
 router.post('/', (req, res, next) => {
@@ -19,20 +19,20 @@ router.post('/', (req, res, next) => {
       email: req.body.email
     }
   })
-  .then((resolve) => {
-    var user = resolve[0];
-    var page = Page.build({
-      title: req.body.title,
-      content: req.body.content,
-    });
-    return page.save().then( page => {
-      return page.setAuthor(user);
-    });
-  })
-  .then(page => {
-    res.redirect(page.route);
-  })
-  .catch(next);
+    .then((values) => {
+      let user = values[0];
+      let page = Page.build({
+        title: req.body.title,
+        content: req.body.content,
+      });
+      return page.save().then(page => {
+        return page.setAuthor(user);
+      });
+    })
+    .then(page => {
+      res.redirect(page.route);
+    })
+    .catch(next);
 });
 
 router.get('/add', (req, res) => {
@@ -43,12 +43,22 @@ router.get('/:urlTitle', (req, res, next) => {
   Page.findOne({
     where: {
       urlTitle: req.params.urlTitle
-    }
-  })
-  .then( page => {
-    res.render('wikipage', {page});
-  })
-  .catch(next);
+    },
+    include: [
+      { model: User, as: 'author' }
+    ]
+    })
+    .then(function (page) {
+      if (page === null) {
+        res.status(404).send();
+      }
+      else {
+        res.render('wikipage', {
+          page: page
+        });
+      }
+    })
+    .catch(next);
 });
 
 module.exports = router;
