@@ -24,6 +24,7 @@ router.post('/', (req, res, next) => {
       let page = Page.build({
         title: req.body.title,
         content: req.body.content,
+        tags: req.body.tags.split(',').map(trim)
       });
       return page.save().then(page => {
         return page.setAuthor(user);
